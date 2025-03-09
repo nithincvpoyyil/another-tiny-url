@@ -1,0 +1,39 @@
+services:
+
+  database:
+      container_name: database
+      image: mongo:8.0.5
+      ports:
+         - "27017:27017"
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: root1
+         MONGO_INITDB_ROOT_PASSWORD: password1
+      volumes:
+         - database:/data/db
+         - type: bind
+           source: ./entry-point-db
+           target: /docker-entrypoint-initdb.d/
+      restart: always
+      networks:
+         - my-network
+
+  server:
+      container_name: server
+      build: ./server
+      ports:
+         - "3000:3000"
+      volumes:
+         - server:/data/server
+      networks:
+         - my-network
+      depends_on:
+         - database
+      restart: always
+      
+
+networks:
+   my-network:
+
+volumes:
+   server:
+   database:

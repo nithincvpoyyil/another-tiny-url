@@ -1,0 +1,14 @@
+*/**/node_modules
+*/**/dist
+*/**/build
+*/**/coverage
+*/**/lib
+*/**/temp
+*/**/tmp
+*/**/logs
+*/**/out
+*/**/output
+*/**/*.log
+*/**/yarn-error.log
+*/**/yarn-debug.log
+*/**/npm

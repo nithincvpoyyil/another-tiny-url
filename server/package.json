@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "todo server",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "nithin",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
