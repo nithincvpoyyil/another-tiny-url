@@ -17,6 +17,22 @@ services:
       networks:
          - my-network
 
+  redis:
+      container_name: redis
+      image: redis:7.0.11
+      ports:
+         - "6379:6379"
+      networks:
+         - my-network
+      restart: always
+      command: redis-server --include /usr/local/etc/redis/redis.conf
+      volumes:
+         - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+         - redis:/data
+         - type: bind
+           source: ./entry-point-redis
+           target: /docker-entrypoint-initdb.d/
+
   server:
       container_name: server
       build: ./server
@@ -28,6 +44,7 @@ services:
          - my-network
       depends_on:
          - database
+         - redis
       restart: always
       
 
@@ -37,3 +54,4 @@ networks:
 volumes:
    server:
    database:
+   redis:

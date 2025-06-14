@@ -1,6 +1,7 @@
-import express from 'express';
-const app = express();
+import * as express from 'express';
+const app = express.default();
 const port = 3000;
+
 
 app.use(express.json());
 
