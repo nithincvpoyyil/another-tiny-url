@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "todo server",
   "main": "src/index.ts",
+  "type": "module",
+  "allowImportingTsExtensions": true,
+
   "scripts": {
     "test": "test",
     "build": "tsc",
