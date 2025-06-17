@@ -1,0 +1,59 @@
+services:
+
+  mongodb:
+      container_name: mongodb
+      image: mongo:8.0.5
+      ports:
+         - "27017:27017"
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+         MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+         MONGO_DEV_USER: ${MONGO_DEV_USER}
+         MONGO_DEV_PASSWORD: ${MONGO_DEV_PASSWORD}
+         MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      volumes:
+         - mongodb:/data/tinydb
+         - ./entry-point-mongo.js:/docker-entrypoint-initdb.d/entry-point-mongo.js
+      restart: always
+      networks:
+         - my-network
+
+  redis:
+      container_name: redis
+      image: redis:7.0.11
+      ports:
+         - "6379:6379"
+      networks:
+         - my-network
+      restart: always
+      command: redis-server --include /usr/local/etc/redis/redis.conf
+      volumes:
+         - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+         - redis:/data
+
+  server:
+      container_name: server
+      build: ./server
+      ports:
+         - "3000:3000"
+      volumes:
+         - server:/data/server
+      networks:
+         - my-network
+      depends_on:
+         - mongodb
+         - redis
+      restart: always
+      environment:
+         - MONGO_URL=mongodb://${MONGO_DEV_USER}:${MONGO_DEV_PASSWORD}@mongodb:27017?directConnection=true&authSource=${MONGO_INITDB_DATABASE}
+         - REDIS_URL=redis://redis:6379
+         - PORT=3000
+      
+
+networks:
+   my-network:
+
+volumes:
+   server:
+   mongodb:
+   redis:
